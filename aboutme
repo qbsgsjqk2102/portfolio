@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developer & Designer Portfolio</title>
+    <!-- Подключаем современный шрифт -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #08070b;
+            --card-dark: #12101a;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --neon-blue: #00f2fe;
+            --neon-purple: #9b51e0;
+            --neon-green: #00ff87;
+            --grid-color: rgba(255, 255, 255, 0.03);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            overflow-x: hidden;
+            background-image:
+                linear-gradient(var(--grid-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        /* Кастомный светящийся курсор */
+        .custom-cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--neon-blue);
+            border-radius: 50%;
+            position: fixed;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 9999;
+            transition: width 0.3s, height 0.3s, background-color 0.3s;
+            box-shadow: 0 0 15px var(--neon-blue);
+        }
+
+        /* Задний рассеянный свет */
+        .glow-bg {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(155,81,224,0.15) 0%, rgba(0,0,0,0) 70%);
+            top: -10%;
+            left: -10%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .glow-bg-2 {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(0,242,254,0.1) 0%, rgba(0,0,0,0) 70%);
+            top: 60%;
+            right: -10%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Шапка сайта */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 8%;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            background: rgba(8, 7, 11, 0.7);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+            background: linear-gradient(45deg, var(--text-main), var(--neon-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            margin-left: 30px;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--neon-blue);
+            text-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        /* Главный экран */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 10%;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin-bottom: 40px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 32px;
+            border: 1px solid var(--neon-blue);
+            color: var(--text-main);
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            background: transparent;
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.1);
+            transition: all 0.4s ease;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
+        }
+
+        .btn:hover {
+            background: var(--neon-blue);
+            color: var(--bg-color);
+            box-shadow: 0 0 30px rgba(0, 242, 254, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* Секция проектов */
+        .portfolio-section {
+            padding: 100px 8%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 60px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background: var(--neon-blue);
+            box-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        /* Сетка проектов */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+        }
+
+        @media (max-width: 968px) {
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+        }
+
+        /* Базовый стиль карточки */
+        .project-card {
+            border-radius: 24px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 550px;
+            position: relative;
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .project-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px) scale(1.01);
+        }
+
+        /* Внутренний контент */
+        .card-preview {
+            flex: 1;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .card-info {
+            padding: 30px;
+            background: rgba(18, 16, 26, 0.85);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .card-info h3 {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        .card-info p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .project-link {
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: gap 0.3s;
+        }
+
+        .project-link:hover {
+            gap: 12px;
+        }
+
+        /* КЕЙС 1: Mindfulness App */
+        .card-mindfulness {
+            background: linear-gradient(135deg, #f5f2eb 0%, #e3ded5 100%);
+            color: #333230;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .card-mindfulness:hover {
+            box-shadow: 0 30px 60px rgba(227, 222, 213, 0.2);
+        }
+
+        .card-mindfulness .card-info {
+            background: rgba(255, 255, 255, 0.75);
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .card-mindfulness .card-info h3,
+        .card-mindfulness .project-link {
+            color: #2c2b29;
+        }
+
+        .zen-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: rgba(163, 177, 138, 0.3);
+            align-self: center;
+            margin-top: 40px;
+            filter: blur(5px);
+            animation: breathe 8s infinite ease-in-out;
+        }
+
+        .zen-line {
+            width: 80%;
+            height: 1px;
+            background: rgba(0,0,0,0.06);
+            margin: 0 auto;
+        }
+
+        /* КЕЙС 2: AIvest */
+        .card-aivest {
+            background: linear-gradient(135deg, #0b0914 0%, #16122c 100%);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .card-aivest:hover {
+            box-shadow: 0 0 40px rgba(155, 81, 224, 0.2);
+            border-color: rgba(155, 81, 224, 0.3);
+        }
+
+        .ai-dashboard {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .chart-row {
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+            height: 100px;
+            padding-left: 20px;
+        }
+
+        .chart-bar {
+            width: 25px;
+            background: linear-gradient(to top, var(--neon-purple), var(--neon-blue));
+            border-radius: 4px 4px 0 0;
+            box-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
+            animation: chartGrow 2s ease-out infinite alternate;
+        }
+
+        .ai-node {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border: 1px dashed var(--neon-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
+        }
+
+        .ai-node::after {
+            content: '';
+            width: 12px;
+            height: 12px;
+            background: var(--neon-green);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--neon-green);
+        }
+
+        /* Подвал */
+        footer {
+            text-align: center;
+            padding: 60px 0;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* --- АНИМАЦИИ --- */
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes breathe {
+            0%, 100% {
+                transform: scale(1);
+                filter: blur(5px);
+            }
+            50% {
+                transform: scale(1.15);
+                filter: blur(2px);
+            }
+        }
+
+        @keyframes chartGrow {
+            0% { height: 30%; }
+            100% { height: 85%; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Кастомный курсор -->
+    <div class="custom-cursor" id="cursor"></div>
+
+    <!-- Фоновые свечения -->
+    <div class="glow-bg"></div>
+    <div class="glow-bg-2"></div>
+
+    <!-- Шапка -->
+    <header>
+        <div class="logo">Dev & Design</div>
+        <nav>
+            <a href="#home">Главная</a>
+            <a href="#projects">Проекты</a>
+            <a href="#contact">Контакты</a>
+        </nav>
+    </header>
+
+    <!-- Главный экран -->
+    <section class="hero" id="home">
+        <h1>Разработка и дизайн <br><span>с фокусом на опыт</span></h1>
+        <p>Создаю современные веб-решения, сочетающие технологичность и визуальную гармонию.</p>
+        <a href="#projects" class="btn">Мои проекты</a>
+    </section>
+
+    <!-- Секция проектов -->
+    <section class="portfolio-section" id="projects">
+        <h2 class="section-title">Портфолио</h2>
+        <div class="projects-grid">
+                        <!-- Проект 1: Mindfulness App -->
+            <div class="project-card card-mindfulness">
+                <div class="card-preview">
+                    <div class="zen-circle"></div>
+                    <div class="zen-line"></div>
+                </div>
+                <div class="card-info">
+                    <h3>Mindfulness App</h3>
+                    <p>Минималистичное приложение для медитаций и осознанности. Спокойные тона, плавные анимации, фокус на дыхании.</p>
+                    <a href="https://qbsgsjqk2102.github.io/mindfulness1" class="project-link">Подробнее →</a>
+                </div>
+            </div>
+
+            <!-- Проект 2: AIvest -->
+            <div class="project-card card-aivest">
+                <div class="card-preview">
+                    <div class="ai-node"></div>
+                    <div class="ai-dashboard">
+                        <div class="chart-row">
+                            <div class="chart-bar" style="height: 60%;"></div>
+                            <div class="chart-bar" style="height: 45%;"></div>
+                            <div class="chart-bar" style="height: 80%;"></div>
+                            <div class="chart-bar" style="height: 50%;"></div>
+                        </div>
+                        <div class="ai-metric">AI Confidence: 94.7%</div>
+                    </div>
+                </div>
+                <div class="card-info">
+                    <h3>AIvest</h3>
+                    <p>Платформа для изучения основ инвестиций на основе ИИ. Темный и светлый интерфейсы, полезная информация, динамические графики.</p>
+                    <a href="https://qbsgsjqk2102.github.io/AIvest" class="project-link">Подробнее →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Контакты -->
+    <section class="portfolio-section" id="contact" style="text-align: center; padding: 100px 8%;">
+        <h2 class="section-title">Свяжитесь со мной</h2>
+        <p style="color: var(--text-muted); max-width: 600px; margin: 20px auto;">
+            Готова обсудить ваш проект, помочь с дизайном или разработкой. Давайте создадим что-то крутое вместе.
+        </p>
+        <a href="mailto:nilovam882@gmail.com" class="btn">Написать письмо</a>
+
+    </section>
+
+    <!-- Подвал -->
+    <footer>
+        <p>© 2026 Dev & Design. Все права защищены.</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Кастомный курсор
+        const cursor = document.getElementById('cursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        // Увеличение курсора при наведении на ссылки/кнопки
+        const interactiveElements = document.querySelectorAll('a, button, .project-card');
+        interactiveElements.forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                cursor.style.width = '40px';
+                cursor.style.height = '40px';
+                cursor.style.backgroundColor = 'rgba(0, 242, 254, 0.2)';
+                cursor.style.border = '1px solid var(--neon-blue)';
+            });
+            item.addEventListener('mouseleave', () => {
+                cursor.style.width = '20px';
+                cursor.style.height = '20px';
+                cursor.style.backgroundColor = 'transparent';
+                cursor.style.border = '2px solid var(--neon-blue)';
+            });
+        });
+
+        // Анимация появления карточек при прокрутке
+        const projectCards = document.querySelectorAll('.project-card');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        projectCards.forEach(card => {
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>
